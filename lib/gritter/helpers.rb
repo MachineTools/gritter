@@ -22,7 +22,7 @@ module Gritter
       notification.push("});") if options[:nodom_wrap].blank?
       text.present? ? notification.join.html_safe : nil
     end
-    
+
     def remove_gritter *args
       options = args.extract_options!
       removed = ["jQuery.gritter.removeAll({"]
@@ -31,7 +31,7 @@ module Gritter
       removed.push("});")
       removed.join.html_safe
     end
-    
+
     def extend_gritter *args
       options = args.extract_options!
       options[:fade_in_speed] = "'#{options[:fade_in_speed]}'" if options[:fade_in_speed].is_a?(String)
@@ -45,13 +45,13 @@ module Gritter
       extended.push("});")
       extended.join.html_safe
     end
-    
+
     def gflash *args
       if session[:gflash].present?
         options = args.extract_options!
         nodom_wrap = options[:nodom_wrap]
         options.delete(:nodom_wrap)
-        
+
         titles = gflash_titles(options)
         flashes = []
         session[:gflash].each do |key, value|
@@ -59,6 +59,7 @@ module Gritter
           value.each do |gflash_value|
             gritter_options = { :image => key, :title => titles[key], :nodom_wrap => nodom_wrap }
             if gflash_value.is_a?(Hash)
+              gflash_value = gflash_value.inject({}){|m,(k,v)| m[k.to_sym] = v; m} # symbolize keys
               text = gflash_value.has_key?(:value) ? (gflash_value[:value] and gflash_value.delete(:value)) : nil
               gritter_options.merge!(gflash_value)
             else
@@ -71,13 +72,13 @@ module Gritter
         options[:js] ? flashes.join("\n") : js(flashes).html_safe
       end
     end
-    
+
     def js *args
       javascript_tag(args.join("\n"))
     end
-    
+
     private
-    
+
     def gflash_titles *args
       options = args.extract_options!
       titles = { :success => get_translation(:success), :warning => get_translation(:warning), :error => get_translation(:error), :notice => get_translation(:notice), :progress => get_translation(:progress) }
@@ -86,7 +87,7 @@ module Gritter
       end
       titles
     end
-    
+
     def get_translation translation
       I18n.t(translation, :scope => [:gflash, :titles])
     end
