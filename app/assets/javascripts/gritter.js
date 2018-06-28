@@ -221,7 +221,7 @@ window.GritterModernizr = function (a, b, c) {
       }
 
       // Add on_click listener
-      $(item).click(function(){
+      $(item).on('click', function(){
         Gritter['_' + 'on_click' + '_' + number]($(this));
       });
 
@@ -230,7 +230,7 @@ window.GritterModernizr = function (a, b, c) {
          *  Disable on_click event when hover over close button
          *  Enable on_click event on mouse leave
       */
-      $(item).find('.gritter-close').bind('mouseenter mouseleave', function(event){
+      $(item).find('.gritter-close').on('mouseenter mouseleave', function(event){
         if(event.type == 'mouseenter'){
           $(item).off("click");
         }
@@ -242,7 +242,7 @@ window.GritterModernizr = function (a, b, c) {
       });
 
       // Bind the hover/unhover states
-      $(item).bind('mouseenter mouseleave', function(event){
+      $(item).on('mouseenter mouseleave', function(event){
         if(event.type == 'mouseenter'){
           if(!sticky){
             Gritter._restoreItemIfFading($(this), number);
@@ -299,7 +299,7 @@ window.GritterModernizr = function (a, b, c) {
 
       // If this is true, then we are coming from clicking the (X)
       if(unbind_events){
-        e.unbind('mouseenter mouseleave');
+        e.off('mouseenter mouseleave');
       }
 
       // Fade it out or remove it
@@ -337,7 +337,7 @@ window.GritterModernizr = function (a, b, c) {
         e.find('.gritter-close').show();
 
         // Clicking (X) makes the perdy thing close
-        e.find('.gritter-close').click(function(){
+        e.find('.gritter-close').on('click', function(){
 
           var unique_id = e.attr('id').split('-')[2];
           Gritter.removeSpecific(unique_id, {}, e, true);
